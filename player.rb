@@ -21,16 +21,15 @@ class Player
   end
 
   def validate_marker(chosen_marker)
-    loop do
-      if chosen_marker.match?(/[a-zA-Z]/)
-        break
-      else
-        print "Please enter a letter: "
-      end
+    until chosen_marker.match?(/[a-zA-Z]/)
+      print "Please enter a letter: "
+      chosen_marker = gets.chomp
     end
     chosen_marker.upcase
   end
 end
+
+
 
 
 

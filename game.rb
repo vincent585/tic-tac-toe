@@ -9,7 +9,7 @@ class Game
     @board = Board.new
     instructions
     @players = [Player.new(1), Player.new(2)]
-    @current_turn = players.sample
+    @current_turn = players.cycle
   end
 
   def instructions
@@ -30,8 +30,13 @@ class Game
   end
 
   def play_game
+    turn_count = 0 
     board.display_board
-    make_move
+    until turn_count == 9 do
+      make_move
+      board.display_board
+      turn_count += 1
+    end
     #call the place_marker method from the current player turn
       #e = players.cycle, e.next e.peek
     #update the board with that player's marker
@@ -44,9 +49,8 @@ class Game
     puts "Choose a cell (1-9) where you would like to place your marker."
     chosen_cell = gets.chomp
     validate_move(chosen_cell)
-    index = chosen_cell.to_i - 1
-    board.game_board[index] = current_turn.marker
-    board.display_board
+    update_board(chosen_cell)
+    
   end
 
   def update_current_turn
@@ -59,22 +63,25 @@ class Game
   private
 
   def validate_move(move)
-    loop do
-      if move.match?(/\d/)
-        break
-      else
-        print "Please enter a valid cell: "
-      end
+    until move.match?(/[1-9]/) do 
+      print "Please enter a valid cell: "
+      move = gets.chomp
     end
     move
   end
-
   
-  
-  # def update_board(move)
+  def update_board(move)
+    index = move.to_i - 1
+    board.game_board[index] = current_turn.next.marker
+  end
 
-  # end
+  def game_over?
+    false
+  end
 
 end
+
+g = Game.new
+g.play_game
 
 
