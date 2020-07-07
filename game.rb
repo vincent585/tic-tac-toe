@@ -1,8 +1,6 @@
 require_relative "board"
 require_relative "player"
 
-require "pry"
-
 class Game
 
   attr_reader :board, :players
@@ -41,22 +39,18 @@ class Game
       update_current_turn
       turn_count += 1
     end
-    #call the place_marker method from the current player turn
-      #e = players.cycle, e.next e.peek
-    #update the board with that player's marker
     #check to see if win conditions are met
       #if yes, declare winner and exit game loop
       #if no, display updated board and repeat loop
   end
 
+  private
+
   def make_move
-    puts "Choose a cell (1-9) where you would like to place your marker."
+    puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
     update_board(valid_move) 
   end
 
-  
-
-  private
 
   def update_current_turn
     @current_player_index = (@current_player_index + 1) % players.size
@@ -64,7 +58,7 @@ class Game
 
   def valid_move
     move = gets.chomp
-    until move.match?(/[1-9]/) && cell_empty?(move) do 
+    until move.match?(/^[1-9]{1}$/) && cell_empty?(move) do 
       print "Please enter a valid cell: "
       move = gets.chomp
     end

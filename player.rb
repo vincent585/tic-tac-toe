@@ -1,6 +1,3 @@
-# require_relative "board"
-# require_relative "game"
-
 class Player
 
   attr_reader :marker, :player_number
@@ -9,8 +6,6 @@ class Player
     @player_number = number
     @marker = set_marker
   end
-
-  
 
   private
 
