@@ -6,6 +6,13 @@ class Game
   attr_reader :board, :players
   attr_accessor :current_player_index
 
+  WIN_CONDITIONS = [
+    [0, 1, 2], [3, 4, 5],
+    [6, 7, 8], [0, 3, 6],
+    [1, 4, 7], [2, 5, 8],
+    [0, 3, 8], [2, 4, 6]
+  ]
+
   def initialize
     @board = Board.new
     instructions
@@ -13,6 +20,24 @@ class Game
     @current_player_index = 0
   end
 
+  def play_game
+    turn_count = 0 
+    board.display_board
+    until turn_count == 9 do
+      make_move
+      board.display_board
+      if player_won?(current_player_index)
+        puts "Player #{players[current_player_index].player_number} wins!".center(65)
+        puts
+        break
+      end
+      update_current_turn
+      turn_count += 1
+    end
+  end
+
+  private
+  
   def instructions
     puts <<-RULES
 
@@ -29,22 +54,6 @@ class Game
 
     RULES
   end
-
-  def play_game
-    turn_count = 0 
-    board.display_board
-    until turn_count == 9 do
-      make_move
-      board.display_board
-      update_current_turn
-      turn_count += 1
-    end
-    #check to see if win conditions are met
-      #if yes, declare winner and exit game loop
-      #if no, display updated board and repeat loop
-  end
-
-  private
 
   def make_move
     puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
@@ -75,6 +84,12 @@ class Game
     return false if board.game_board[index] == players[0].marker ||
                     board.game_board[index] == players[1].marker
     true
+  end
+
+  def player_won?(last_move)
+    WIN_CONDITIONS.any? do |outcome|
+      outcome.all? { |cell| board.game_board[cell] == players[last_move].marker }
+    end
   end
 end
 
