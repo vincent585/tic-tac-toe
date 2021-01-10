@@ -1,10 +1,9 @@
-require_relative "board"
-require_relative "player"
+require_relative 'board'
+require_relative 'player'
 
 class Game
-
   attr_reader :board, :players
-  attr_accessor :current_player_index
+  attr_accessor :current_player_index, :turn_count
 
   WIN_CONDITIONS = [
     [0, 1, 2], [3, 4, 5],
@@ -18,21 +17,18 @@ class Game
     instructions
     @players = [Player.new(1), Player.new(2)]
     @current_player_index = 0
+    @turn_count = 0
   end
 
   def play_game
-    turn_count = 0 
     board.display_board
-    until turn_count == 9 do
+    until turn_count == 9
       make_move
       board.display_board
-      if player_won?(current_player_index)
-        puts "Player #{players[current_player_index].player_number} wins!".center(65)
-        puts
-        break
-      end
+      return display_winner_message if player_won?(current_player_index)
+
       update_current_turn
-      turn_count += 1
+      @turn_count += 1
     end
   end
 
@@ -56,10 +52,10 @@ class Game
   end
 
   def make_move
-    puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
-    update_board(valid_move) 
+    puts "Player #{players[current_player_index].player_number}!
+    Choose a cell (1-9) where you would like to place your marker."
+    update_board(valid_move)
   end
-
 
   def update_current_turn
     @current_player_index = (@current_player_index + 1) % players.size
@@ -67,13 +63,13 @@ class Game
 
   def valid_move
     move = gets.chomp
-    until move.match?(/^[1-9]{1}$/) && cell_empty?(move) do 
-      print "Please enter a valid cell: "
+    until move.match?(/^[1-9]{1}$/) && cell_empty?(move)
+      print 'Please enter a valid cell: '
       move = gets.chomp
     end
     move
   end
-  
+
   def update_board(move)
     index = move.to_i - 1
     board.game_board[index] = players[current_player_index].marker
@@ -91,9 +87,12 @@ class Game
       outcome.all? { |cell| board.game_board[cell] == players[last_move].marker }
     end
   end
+
+  def display_winner_message
+    puts "Player #{players[current_player_index].player_number} wins!".center(65)
+    puts
+  end
 end
 
 g = Game.new
 g.play_game
-
-

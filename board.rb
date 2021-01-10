@@ -1,7 +1,6 @@
 class Board
-
   attr_accessor :game_board
-  
+
   def initialize
     @game_board = create_board
   end
@@ -15,7 +14,7 @@ class Board
                            ---+---+---
                             #{game_board[6]} | #{game_board[7]} | #{game_board[8]}
 
-  HEREDOC
+    HEREDOC
   end
 
   private
