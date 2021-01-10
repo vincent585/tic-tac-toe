@@ -10,7 +10,7 @@ class Player
     print "Player #{player_number}! Please choose a letter to indicate your marker: "
     loop do
       @marker = validate_marker(player_input)
-      break if @marker
+      return @marker if @marker
 
       puts 'Please enter a single letter, a-z!'
     end
