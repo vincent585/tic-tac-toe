@@ -21,6 +21,7 @@ class Game
   end
 
   def play_game
+    set_player_markers
     board.display_board
     until turn_count == 9
       make_move
@@ -51,9 +52,12 @@ class Game
     RULES
   end
 
+  def set_player_markers
+    players.each(&:set_marker)
+  end
+
   def make_move
-    puts "Player #{players[current_player_index].player_number}!
-    Choose a cell (1-9) where you would like to place your marker."
+    puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
     update_board(valid_move)
   end
 
@@ -79,6 +83,7 @@ class Game
     index = cell.to_i - 1
     return false if board.game_board[index] == players[0].marker ||
                     board.game_board[index] == players[1].marker
+
     true
   end
 
