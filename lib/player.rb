@@ -3,11 +3,11 @@ class Player
 
   def initialize(number)
     @player_number = number
-    @marker = set_marker
+    @marker = nil
   end
 
   def set_marker
-    print "Player #{player_number}! Please choose a letter to indicate your marker: "
+    puts "Player #{player_number}! Please choose a letter to indicate your marker: "
     loop do
       @marker = validate_marker(player_input)
       return @marker if @marker

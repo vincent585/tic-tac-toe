@@ -13,18 +13,20 @@ describe Player do
         player_one.set_marker
       end
 
-      # it 'sets the marker value to X' do
-      #   valid_input = 'x'
-      #   allow(player_one).to receive(:player_input).and_return(valid_input)
-      #   expect(player_one.marker).to eq('X')
-      #   player_one.set_marker
-      # end
+      it 'sets the marker value to X' do
+        valid_input = 'x'
+        allow(player_one).to receive(:puts)
+        allow(player_one).to receive(:player_input).and_return(valid_input)
+        player_one.set_marker
+        expect(player_one.marker).to eq('X')
+      end
     end
 
     context 'when user inputs an invalid marker, then a valid marker' do
       before do
         num = '9'
         valid_input = 'x'
+        allow(player_one).to receive(:puts)
         allow(player_one).to receive(:player_input).and_return(num, valid_input)
       end
 
@@ -34,9 +36,8 @@ describe Player do
       end
 
       it 'sets the value of marker to X' do
-        mark = player_one.instance_variable_get(:@marker)
-        expect(mark).to eq('X')
         player_one.set_marker
+        expect(player_one.marker).to eq('X')
       end
     end
   end
