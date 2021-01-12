@@ -12,5 +12,20 @@ describe Game do
         expect(new_game).not_to be_player_won
       end
     end
+
+    context 'when the top row reads X X X' do
+      subject(:top_row_win) { described_class.new }
+      before do
+        p1 = top_row_win.players[0]
+        p2 = top_row_win.players[1]
+        p1.instance_variable_set(:@marker, 'X')
+        p2.instance_variable_set(:@marker, 'O')
+        top_row_win.board.instance_variable_set(:@game_board, ['X', 'X', 'X', 4, 5, 6, 7, 8, 9])
+      end
+
+      it 'ends the game' do
+        expect(top_row_win).to be_player_won
+      end
+    end
   end
 end
