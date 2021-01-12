@@ -2,7 +2,7 @@ class Board
   attr_accessor :game_board
 
   def initialize
-    @game_board = create_board
+    @game_board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   end
 
   def display_board
@@ -15,11 +15,5 @@ class Board
                             #{game_board[6]} | #{game_board[7]} | #{game_board[8]}
 
     HEREDOC
-  end
-
-  private
-
-  def create_board
-    Array.new(9) { |cell| (cell + 1).to_s }
   end
 end

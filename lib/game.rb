@@ -16,20 +16,45 @@ class Game
     @board = Board.new
     instructions
     @players = [Player.new(1), Player.new(2)]
-    @current_player_index = 0
+    @current_player_index = players.sample
     @turn_count = 0
   end
 
   def play_game
     set_player_markers
+    board.create_board
     board.display_board
-    until turn_count == 9
+    game_loop
+  end
+
+  def make_move
+    puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
+    update_board(valid_move)
+  end
+
+  def player_won?
+    WIN_CONDITIONS.any? do |outcome|
+      return true if outcome.all? { |cell| board.game_board[cell] == players[0].marker }
+      return true if outcome.all? { |cell| board.game_board[cell] == players[1].marker }
+    end
+  end
+
+  def cell_empty?(cell)
+    index = cell.to_i - 1
+    return false if board.game_board[index] == players[0].marker ||
+                    board.game_board[index] == players[1].marker
+
+    true
+  end
+
+  def game_loop
+    until turn_limit_reached?
       make_move
       board.display_board
-      return display_winner_message if player_won?(current_player_index)
+      return display_winner_message if player_won?
 
       update_current_turn
-      @turn_count += 1
+      increment_turn_count
     end
   end
 
@@ -56,13 +81,16 @@ class Game
     players.each(&:set_marker)
   end
 
-  def make_move
-    puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
-    update_board(valid_move)
-  end
-
   def update_current_turn
     @current_player_index = (@current_player_index + 1) % players.size
+  end
+
+  def turn_limit_reached?
+    turn_count == 9
+  end
+
+  def increment_turn_count
+    @turn_count += 1
   end
 
   def valid_move
@@ -79,25 +107,8 @@ class Game
     board.game_board[index] = players[current_player_index].marker
   end
 
-  def cell_empty?(cell)
-    index = cell.to_i - 1
-    return false if board.game_board[index] == players[0].marker ||
-                    board.game_board[index] == players[1].marker
-
-    true
-  end
-
-  def player_won?(last_move)
-    WIN_CONDITIONS.any? do |outcome|
-      outcome.all? { |cell| board.game_board[cell] == players[last_move].marker }
-    end
-  end
-
   def display_winner_message
     puts "Player #{players[current_player_index].player_number} wins!".center(65)
     puts
   end
 end
-
-g = Game.new
-g.play_game
