@@ -14,15 +14,14 @@ class Game
 
   def initialize
     @board = Board.new
-    instructions
     @players = [Player.new(1), Player.new(2)]
-    @current_player_index = players.sample
+    @current_player_index = 0
     @turn_count = 0
   end
 
   def play_game
+    instructions
     set_player_markers
-    board.create_board
     board.display_board
     game_loop
   end

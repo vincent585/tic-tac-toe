@@ -9,7 +9,7 @@ describe Game do
     context 'when the board is new' do
       subject(:new_game) { described_class.new }
       it 'does not end the game' do
-        expect(:new_game).not_to be_player_won
+        expect(new_game).not_to be_player_won
       end
     end
   end
