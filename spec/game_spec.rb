@@ -27,5 +27,20 @@ describe Game do
         expect(top_row_win).to be_player_won
       end
     end
+
+    context 'when the middle column reads O O O' do
+      subject(:middle_column_win) { described_class.new }
+      before do
+        p1 = middle_column_win.players[0]
+        p2 = middle_column_win.players[1]
+        p1.instance_variable_set(:@marker, 'X')
+        p2.instance_variable_set(:@marker, 'O')
+        middle_column_win.board.instance_variable_set(:@game_board, [1, 'O', 3, 4, 'O', 6, 7, 'O', 9])
+      end
+
+      it 'ends the game' do
+        expect(middle_column_win).to be_player_won
+      end
+    end
   end
 end
