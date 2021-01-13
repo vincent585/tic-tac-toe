@@ -42,5 +42,18 @@ describe Game do
         expect(middle_column_win).to be_player_won
       end
     end
+
+    context 'when the diagonal reads X X X' do
+      subject(:diagonal_win) { described_class.new }
+      before do
+        diagonal_win.players[0].instance_variable_set(:@marker, 'X')
+        diagonal_win.players[1].instance_variable_set(:@marker, 'O')
+        diagonal_win.board.instance_variable_set(:@game_board, ['X', 2, 3, 4, 'X', 6, 7, 8, 'X'])
+      end
+
+      it 'ends the game' do
+        expect(diagonal_win).to be_player_won
+      end
+    end
   end
 end
