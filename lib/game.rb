@@ -57,6 +57,10 @@ class Game
     end
   end
 
+  def turn_limit_reached?
+    turn_count >= 9
+  end
+
   private
 
   def instructions
@@ -82,10 +86,6 @@ class Game
 
   def update_current_turn
     @current_player_index = (@current_player_index + 1) % players.size
-  end
-
-  def turn_limit_reached?
-    turn_count == 9
   end
 
   def increment_turn_count

@@ -56,4 +56,32 @@ describe Game do
       end
     end
   end
+
+  describe 'turn_limit_reached?' do
+    context 'when the game is new' do
+      subject(:new_game) { described_class.new }
+
+      it 'does not end the game' do
+        expect(new_game).not_to be_turn_limit_reached
+      end
+    end
+
+    context 'when the turn count is 5' do
+      subject(:turn_count_five) { described_class.new }
+
+      it 'does not end the game' do
+        turn_count_five.instance_variable_set(:@turn_count, 5)
+        expect(turn_count_five).not_to be_turn_limit_reached
+      end
+    end
+
+    context 'when the turn count reaches the turn limit' do
+      subject(:turn_limit) { described_class.new }
+
+      it 'ends the game' do
+        turn_limit.instance_variable_set(:@turn_count, 9)
+        expect(turn_limit).to be_turn_limit_reached
+      end
+    end
+  end
 end
