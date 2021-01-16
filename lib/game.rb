@@ -28,7 +28,12 @@ class Game
 
   def make_move
     puts "Player #{players[current_player_index].player_number}! Choose a cell (1-9) where you would like to place your marker."
-    update_board(valid_move)
+    loop do
+      move = valid_move(select_cell)
+      return update_board(move) if move
+
+      puts 'Please enter a valid cell!'
+    end
   end
 
   def player_won?
@@ -61,6 +66,19 @@ class Game
     turn_count >= 9
   end
 
+  def valid_move(selected_cell)
+    return selected_cell if selected_cell.match?(/^[1-9]{1}$/) && cell_empty?(selected_cell)
+  end
+
+  def select_cell
+    gets.chomp
+  end
+
+  def update_board(move)
+    index = move.to_i - 1
+    board.game_board[index] = players[current_player_index].marker
+  end
+
   private
 
   def instructions
@@ -90,20 +108,6 @@ class Game
 
   def increment_turn_count
     @turn_count += 1
-  end
-
-  def valid_move
-    move = gets.chomp
-    until move.match?(/^[1-9]{1}$/) && cell_empty?(move)
-      print 'Please enter a valid cell: '
-      move = gets.chomp
-    end
-    move
-  end
-
-  def update_board(move)
-    index = move.to_i - 1
-    board.game_board[index] = players[current_player_index].marker
   end
 
   def display_winner_message

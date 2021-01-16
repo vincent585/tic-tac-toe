@@ -57,7 +57,7 @@ describe Game do
     end
   end
 
-  describe 'turn_limit_reached?' do
+  describe '#turn_limit_reached?' do
     context 'when the game is new' do
       subject(:new_game) { described_class.new }
 
@@ -81,6 +81,70 @@ describe Game do
       it 'ends the game' do
         turn_limit.instance_variable_set(:@turn_count, 9)
         expect(turn_limit).to be_turn_limit_reached
+      end
+    end
+  end
+
+  describe '#make_move' do
+    context 'when a player enters a valid move' do
+      subject(:game) { described_class.new }
+
+      before do
+        game.players[0].instance_variable_set(:@marker, 'X')
+        valid_input = '3'
+        allow(game).to receive(:puts)
+        allow(game).to receive(:select_cell).and_return(valid_input)
+      end
+
+      it 'updates the board' do
+        game.make_move
+        expect(game.board.game_board).to eq([1, 2, 'X', 4, 5, 6, 7, 8, 9])
+      end
+    end
+
+    context 'when a player enters an invalid move, then a valid move' do
+      subject(:invalid_game) { described_class.new }
+
+      before do
+        invalid_game.players[0].instance_variable_set(:@marker, 'X')
+        invalid_cell = '12'
+        valid_cell = '1'
+        allow(invalid_game).to receive(:puts)
+        allow(invalid_game).to receive(:select_cell).and_return(invalid_cell, valid_cell)
+      end
+
+      it 'displays error message once and ends the loop' do
+        expect(invalid_game).to receive(:puts).with('Please enter a valid cell!').once
+        invalid_game.make_move
+      end
+
+      it 'updates the board' do
+        invalid_game.make_move
+        expect(invalid_game.board.game_board).to eq(['X', 2, 3, 4, 5, 6, 7, 8, 9])
+      end
+    end
+
+    context 'when a player selects a filled cell, then a valid cell' do
+      subject(:filled_cell_game) { described_class.new }
+
+      before do
+        filled_cell_game.players[0].instance_variable_set(:@marker, 'X')
+        filled_cell_game.players[1].instance_variable_set(:@marker, 'O')
+        filled_cell_game.board.instance_variable_set(:@game_board, [1, 'O', 3, 4, 5, 6, 7, 8, 9])
+        filled_cell = '2'
+        valid_cell = '4'
+        allow(filled_cell_game).to receive(:puts)
+        allow(filled_cell_game).to receive(:select_cell).and_return(filled_cell, valid_cell)
+      end
+
+      it 'displays an error message then ends the loop' do
+        expect(filled_cell_game).to receive(:puts).with('Please enter a valid cell!').once
+        filled_cell_game.make_move
+      end
+
+      it 'updates the valid cell and does not change the prefilled cell' do
+        filled_cell_game.make_move
+        expect(filled_cell_game.board.game_board).to eq([1, 'O', 3, 'X', 5, 6, 7, 8, 9])
       end
     end
   end
