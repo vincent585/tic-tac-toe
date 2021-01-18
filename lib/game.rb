@@ -79,6 +79,14 @@ class Game
     board.game_board[index] = players[current_player_index].marker
   end
 
+  def update_current_turn
+    @current_player_index = (@current_player_index + 1) % players.size
+  end
+
+  def increment_turn_count
+    @turn_count += 1
+  end
+
   private
 
   def instructions
@@ -100,14 +108,6 @@ class Game
 
   def set_player_markers
     players.each(&:set_marker)
-  end
-
-  def update_current_turn
-    @current_player_index = (@current_player_index + 1) % players.size
-  end
-
-  def increment_turn_count
-    @turn_count += 1
   end
 
   def display_winner_message

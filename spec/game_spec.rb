@@ -148,4 +148,23 @@ describe Game do
       end
     end
   end
+
+  describe '#update_current_turn' do
+    subject(:current_turn_zero) { described_class.new }
+    context 'when the current player index is 0' do
+      it 'updates the current player index to 1' do
+        current_turn_zero.update_current_turn
+        expect(current_turn_zero.current_player_index).to eq(1)
+      end
+    end
+
+    context 'when current player index is 1' do
+      subject(:current_turn_one) { described_class.new }
+      it 'updates the current player index to 0' do
+        current_turn_one.instance_variable_set(:@current_player_index, 1)
+        current_turn_one.update_current_turn
+        expect(current_turn_one.current_player_index).to eq(0)
+      end
+    end
+  end
 end
