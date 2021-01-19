@@ -167,4 +167,23 @@ describe Game do
       end
     end
   end
+
+  describe '#increment_turn_count' do
+    context 'when the game is new' do
+      subject(:new_count) { described_class.new }
+      it 'increments the turn count to 1' do
+        new_count.increment_turn_count
+        expect(new_count.turn_count).to eq(1)
+      end
+    end
+
+    context 'when the turn count is 5' do
+      subject(:five_count) { described_class.new }
+      it 'increments the turn count to 6' do
+        five_count.instance_variable_set(:@turn_count, 5)
+        five_count.increment_turn_count
+        expect(five_count.turn_count).to eq(6)
+      end
+    end
+  end
 end
